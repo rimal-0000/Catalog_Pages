@@ -12,8 +12,8 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 
-import { useAuth } from "@/hooks/context/authContext";
-import { loginUser } from "@/services/authServices";
+import { useAuth } from "../../hooks/context/authContext";
+import { loginUser } from "../../services/authServices";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setLoading(true);

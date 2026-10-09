@@ -66,14 +66,26 @@ const CatalogueViewer = ({
   }, []);
 
   const playSound = useCallback(() => {
-    if (!soundOn) return;
-    const audio = pageSoundRef.current;
-    if (!audio) return;
-    audio.currentTime = 0;
-    audio.play().catch(() => {
-      /* ignore autoplay restrictions */
-    });
-  }, [soundOn]);
+  if (!soundOn) return;
+
+  const audio = pageSoundRef.current;
+  if (!audio) {
+    console.error("Page flip audio not loaded");
+    return;
+  }
+
+  audio.pause();
+  audio.currentTime = 0;
+
+  audio.play().catch((error) => {
+    console.error("Page flip sound error:", error);
+  });
+}, [soundOn]);
+
+const handleFlip = (event: { data: number }) => {
+  setCurrentPage(event.data);
+  playSound();
+};
 
   useEffect(() => {
     const el = stageRef.current;
@@ -137,11 +149,6 @@ const CatalogueViewer = ({
   const goToFirstPage = () => getPageFlip()?.flip(0);
   const goToLastPage = () => getPageFlip()?.flip(total - 1);
   const goToPage = (index: number) => getPageFlip()?.flip(index);
-
-  const handleFlip = (event: { data: number }) => {
-    setCurrentPage(event.data);
-    playSound(); // click, drag, swipe, buttons, keyboard – everything
-  };
 
   // Keyboard
   useEffect(() => {

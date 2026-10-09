@@ -62,19 +62,15 @@ export const logoutUser = async () => {
 };
 
 export const refreshToken = async () => {
-  const response = await fetch(`${API_URL}/refresh-token`,
-    {
-      method: "POST",
-      credentials: "include",
-    }
-  );
+  const response = await fetch(`${API_URL}/refresh-token`, {
+    method: "POST",
+    credentials: "include",
+  });
 
-  const data = await response.json();
+  const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(
-      data.message || "Session expired"
-    );
+    throw new Error(data.message || "Session expired");
   }
 
   return {

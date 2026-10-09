@@ -206,24 +206,30 @@ export const fetchCatalogById = async (
 };
 
 
+
 export const updateCatalog = async (
   id: string,
-  formData: FormData,
+  updates: {
+    published?: boolean;
+    title?: string;
+    description?: string;
+  },
   accessToken: string
 ): Promise<Catalog> => {
   const res = await fetch(`${BASE}/catalogs/${id}`, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: formData,
+    headers: authHeaders(accessToken),
+    body: JSON.stringify(updates),
   });
 
   const data = await res.json();
 
+  console.log("UPDATE CATALOG STATUS:", res.status);
+  console.log("UPDATE CATALOG RESPONSE:", data);
+
   if (!res.ok) {
     throw new Error(
-      data.message || "Failed to update catalog"
+      data.message || data.error || "Failed to update catalog"
     );
   }
 

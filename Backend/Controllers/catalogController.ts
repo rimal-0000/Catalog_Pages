@@ -122,26 +122,15 @@ export const getCatalog = async (
   }
 };
 
-// UPDATE CATALOG
+
 export const updateCatalog = async (
   req: AuthRequest,
   res: Response
 ) => {
   try {
-    const { title, description, published } = req.body;
+    const { title, description, published } = req.body ?? {};
 
-    const catalog = await Catalog.findByIdAndUpdate(
-      req.params.id,
-      {
-        title,
-        description,
-        published,
-      },
-      {
-        returnDocument: "after",
-        runValidators: true,
-      }
-    );
+    const catalog = await Catalog.findById(req.params.id);
 
     if (!catalog) {
       return res.status(404).json({
@@ -149,18 +138,27 @@ export const updateCatalog = async (
       });
     }
 
-    res.status(200).json({
+    if (title !== undefined) catalog.title = title;
+    if (description !== undefined) catalog.description = description;
+    if (published !== undefined) {
+      catalog.published = published === true || published === "true";
+    }
+
+    await catalog.save();
+
+    return res.status(200).json({
       message: "Catalog updated successfully",
       catalog,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("UPDATE CATALOG ERROR:", error);
+
+    return res.status(500).json({
       message: "Failed to update catalog",
-      error,
+      error: error instanceof Error ? error.message : String(error),
     });
   }
 };
-
 // DELETE CATALOG
 export const deleteCatalog = async (
   req: AuthRequest,
