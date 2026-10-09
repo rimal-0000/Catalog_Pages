@@ -15,7 +15,7 @@ export interface LoginResponse {
   accessToken: string;
 }
 
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = "https://catalogdesign.onrender.com/api/auth";
 
 export const loginUser = async (
   loginData: LoginData

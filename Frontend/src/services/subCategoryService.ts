@@ -1,4 +1,4 @@
-const BASE = "http://localhost:5000/api";
+const BASE = "https://catalogdesign.onrender.com/api/subcategories";
 
 const authHeaders = (accessToken: string) => ({
   "Content-Type": "application/json",

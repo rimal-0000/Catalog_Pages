@@ -1,4 +1,4 @@
-const BASE = "http://localhost:5000/api";
+const BASE = "https://catalogdesign.onrender.com/api/categories";
 
 export interface Category {
   _id: string;
